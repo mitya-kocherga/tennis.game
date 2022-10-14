@@ -13,9 +13,12 @@ const WinnerPresentation = ({ winnerName, flushState }) => (
 
 export default function Home() {
   const initialState = { left: 0, right: 0 }
-
+  
   const [count, setCount] = useState(initialState)
   const [winner, setWinner] = useState()
+  
+  const [timerId, setTimerId] = useState()
+  const [canAbort, setCanAbort] = useState({can: false})
 
   const flushState = () => {
     setCount(initialState)
@@ -26,38 +29,55 @@ export default function Home() {
 
   useEffect(() => {
     if (count.left > 10) {
-      const name = leftRef.current.innerText;
+      const name = leftRef.current.value;
+      setCanAbort({can: false})
       setWinner(name)
     }
     if (count.right > 10) {
-      const name = rightRef.current.innerText;
+      const name = rightRef.current.value;
+      setCanAbort({can: false})
       setWinner(name)
     }
   }, [count])
 
 
   const onSideClick = (side) => () => {
-    setCount({ ...count, [side]: count[side] + 1 })
+      clearInterval(timerId)
+      setCount({ ...count, [side]: count[side] + 1 })
+      setCanAbort({can: true, prevState: count});
+      const timer = setTimeout(() => setCanAbort({can: false}), 2000)
+      setTimerId(timer)
+  }
+
+  const onAbort = () => {
+    setCount(canAbort.prevState)
+    setCanAbort({can: false})
   }
 
   return (
     <div className={styles.container}>
+      {
+        canAbort.can ?
+          <div className={styles.aborter}>
+            отменить? <button onClick={onAbort}>отменить!</button>
+          </div>
+          : null
+      }
       {
         winner ?
           <WinnerPresentation flushState={flushState} winnerName={winner} />
           :
           <>
             <div className={styles.left} onClick={onSideClick('left')}>
-              <span contentEditable className={styles.name} ref={leftRef}>
-                Name1
-              </span>
+              <input type="text" defaultValue="Name1" className={styles.name} ref={leftRef} onClick={(e) => e.stopPropagation()} />
+
               <span className={styles.text}>
                 {count.left}
               </span>
             </div><div className={styles.right} onClick={onSideClick('right')}>
-              <span contentEditable className={styles.name} ref={rightRef}>
-                Name2
-              </span>
+
+              <input type="text" defaultValue="Name2" FclassName={styles.name} ref={rightRef} onClick={(e) => e.stopPropagation()} />
+
               <span className={styles.text}>
                 {count.right}
               </span>

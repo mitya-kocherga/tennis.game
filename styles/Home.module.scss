@@ -27,7 +27,18 @@
     font-size: 640px;
   }
 
-  .name {
-    color: #ffffff;
+  .aborter {
+    width: 260px;
+    height: 40px;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    background-color: #00A08A;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
