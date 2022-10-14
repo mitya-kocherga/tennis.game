@@ -1,0 +1,33 @@
+@mixin playerCount {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+
+
+  .left {
+    background-color: #3216B0;
+    @include playerCount;
+  }
+
+  .right {
+    background-color: #00A08A;
+    @include playerCount;
+  }
+
+  .text {
+    font-size: 640px;
+  }
+
+  .name {
+    color: #ffffff;
+  }
+}
